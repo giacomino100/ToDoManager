@@ -1,0 +1,14 @@
+#elem-task {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+}
+
+.important-task {
+    color: red;
+    font-weight: 600;
+}
+
+.icon-btn {
+    cursor: pointer;
+}

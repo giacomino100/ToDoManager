@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://www.my-schema.com/userSchema.json",
+    "title": "user",
+    "description": "JSON schema for task object",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "description": "path to the JSON Schema to use for the validation of the JSOn file describing the task"
+        },
+        "id": {
+            "type": "integer",
+            "description": "Unique identifier of the user"
+        },
+        "name": {
+            "type": "string",
+            "description": "Username of the user"
+        },
+        "email": {
+            "type": "string",
+            "description": "Personal email to use for authentication"
+        },
+        "password": {
+            "type": "string",
+            "description": "Password of the user",
+            "minLength": 6,
+            "maxLength": 20
+        }
+    },
+    "required": ["id", "email"]
+
+}
