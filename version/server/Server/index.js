@@ -76,7 +76,7 @@ app.put('/api/tasks/:taskId/completion', passport.authenticate('jwt', { session:
 app.get('/api/users/:userId/tasks/created', passport.authenticate('jwt', { session: false }), taskController.getUserTasks);
 app.get('/api/users/:userId/tasks/assigned', taskController.getAssignedTasks);
 
-app.get('/api/tasks/:taskId/assignees', assignmentController.getUsersAssigned)
+app.get('/api/tasks/:taskId/assignees', passport.authenticate('jwt', { session: false }), assignmentController.getUsersAssigned)
 app.post('/api/tasks/:taskId/assignees', assignmentController.assignTaskToUser)
 app.delete('/api/tasks/:taskId/assignees/:userId', assignmentController.removeUser)
 

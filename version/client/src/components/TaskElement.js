@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ListGroup, Row, Col, Button, Modal, Form } from 'react-bootstrap';
+import { ListGroup, Row, Col, Button, Modal, Form, Table } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faChild } from '@fortawesome/free-solid-svg-icons';
@@ -60,8 +60,9 @@ function ModalDelete(props) {
 function ModalEdit(props) {
 
     const {task, setUpdated, handleClose} = props;
+    console.log(task)
 
-    const [newDescr, setNewDescr] = useState(task.description);
+    const [newDescr, setNewDescr] = useState(task.description ? task.description : '' );
     const [newDeadline, setNewDeadline] = useState(task.deadline.slice(0, 16)); //di tutta la stringa della deadline prendo solo le prime 16
     const [newPriv, setNewPriv] = useState(task.private);
     const [newImprt, setNewImprt] = useState(task.important);
@@ -135,7 +136,9 @@ function TaskElement(props) {
     const {task, loggedIn} = props;
 
     /** I have the needeed to have the set state to fill the value of checked */ 
-     const [completed, setCompleted] = useState(task.completed) 
+     const [completed, setCompleted] = useState(task.completed)
+     
+    const [usersAssigned, setUsersAssigned] = useState([]);
 
     let deadlineToDisplay = task.deadline
     deadlineToDisplay =  dayjs(deadlineToDisplay).isValid() ? dayjs(deadlineToDisplay).format('DD/MM/YYYY h:mm A') : '';
@@ -154,40 +157,66 @@ function TaskElement(props) {
         .catch((err) => console.log(err))
     };
 
+    useEffect(()=>{
+        API.getUsersAssigned(task.id)
+        .then(res => setUsersAssigned(res))
+        .catch( err => console.log(err))
+    }, [])
+
     return (
-        <ListGroup.Item className='d-flex w-100 justify-content-between' id='elem-task'>
-            <Col md={6}>
-                {loggedIn ? <>
-                <div className="custom-control custom-checkbox">
-                    <input type="checkbox" className="custom-control-input" id={task.id} checked={completed} onChange={() => markTask(task.id)} ></input> 
-                    <label className={task.important ? 'custom-control-label important-task' : 'custom-control-label'} htmlFor={task.id}>{task.description}</label>
-                </div>
-                </>
-                :
-                <>
-                <label htmlFor={task.id}>{task.description}</label>
-                </>
-                }
-            </Col>
+        <ListGroup.Item id='elem-task'>
+            <Row>
+                <Col md={6}>
+                    {loggedIn ? <>
+                    <div className="custom-control custom-checkbox">
+                        <input type="checkbox" className="custom-control-input" id={task.id} checked={completed} onChange={() => markTask(task.id)} ></input> 
+                        <label className={task.important ? 'custom-control-label important-task' : 'custom-control-label'} htmlFor={task.id}>{task.description}</label>
+                    </div>
+                    </>
+                    :
+                    <>
+                    <label htmlFor={task.id}>{task.description}</label>
+                    </>
+                    }
+                </Col>
 
-            <Col>
-                {!task.private && <FontAwesomeIcon icon={faChild} />}
-            </Col>
+                <Col>
+                    {!task.private && <FontAwesomeIcon icon={faChild} />}
+                </Col>
 
-            <Col md={3}>
-                <small>{deadlineToDisplay}</small>
-            </Col>
+                <Col md={3}>
+                    <small>{deadlineToDisplay}</small>
+                </Col>
 
-            <Col>
-                <FontAwesomeIcon icon={faEdit} className='icon-btn' onClick={handleShowEdit} />
-            </Col>
+                <Col>
+                    <FontAwesomeIcon icon={faEdit} className='icon-btn' onClick={handleShowEdit} />
+                </Col>
 
-            <Col>
-                <FontAwesomeIcon icon={faTrashAlt} className='icon-btn' onClick={handleShowDelete} />
-            </Col>
+                <Col>
+                    <FontAwesomeIcon icon={faTrashAlt} className='icon-btn' onClick={handleShowDelete} />
+                </Col>
+            </Row>
+            <Row style={{margin: "2px"}}>
+                Assigned to: 
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {usersAssigned.map( x => <tr>
+                        <td>{x.name}</td>
+                        <td>{x.email}</td>
+                        </tr>)}
+                    </tbody>
+                </Table>
+            </Row>
 
-            <ModalEdit setUpdated={props.setUpdated} showEdit={showEdit} handleClose={handleCloseEdit} handleShow={handleShowEdit} setTasks={props.setTasks} task={{ id: task.id, description: task.description, deadline: task.deadline, private: task.private, important: task.important }} />
-            <ModalDelete setUpdated={props.setUpdated} showDelete={showDelete} handleClose={handleCloseDelete} handleShow={handleShowDelete} setTasks={props.setTasks} task={{ id: task.id, description: task.description, date: task.deadline, private: task.private, important: task.important }} />
+
+            <ModalEdit setUpdated={props.setUpdated} showEdit={showEdit} handleClose={handleCloseEdit} handleShow={handleShowEdit} setTasks={props.setTasks} task={task} />
+            <ModalDelete setUpdated={props.setUpdated} showDelete={showDelete} handleClose={handleCloseDelete} handleShow={handleShowDelete} setTasks={props.setTasks} task={task} />
         </ListGroup.Item>
     );
 };

@@ -55,11 +55,12 @@ function App() {
                     </Col>
                     <Col md={8}>
                         <Switch>
+                            <Route exact path='/allyourtasks' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
                             <Route exact path='/all' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
                             <Route exact path='/today' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
                             <Route exact path='/next7days' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
                             <Route exact path='/important' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
-                            <Route exact path='/login'><Redirect to='/all'/></Route>
+                            <Route exact path='/login'><Redirect to='/allyourtasks'/></Route>
                         </Switch>
                     </Col>
                     </Row>

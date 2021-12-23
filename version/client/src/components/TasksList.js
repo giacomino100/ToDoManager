@@ -34,7 +34,7 @@ const TasksList = (props) => {
     
 
     const handleFilteredTasks = (filteredTasks) => {
-        if(filter === 'all')
+        if(filter === 'allyourtasks')
             return filteredTasks
         if(filter === 'today')
             return filteredTasks.filter( t => t.deadline && t.deadline.isToday())
@@ -52,6 +52,7 @@ const TasksList = (props) => {
                 .then(res => {
                     setPage(res)
                     setTasks(res.tasks)
+                    setUpdated(false)
                 })
                 .catch((err) => console.log(err))
             } else if(loggedIn === true){
@@ -60,10 +61,10 @@ const TasksList = (props) => {
                     setPage(res)
                     let filteredTasks = handleFilteredTasks(res.tasks)
                     setTasks(filteredTasks)
+                    setUpdated(false)
                 })
                 .catch((err) => console.log(err))
             }
-            setUpdated(false)
         }
 
     }, [updated, user.id, loggedIn, setTasks, setUpdated]);
@@ -74,7 +75,7 @@ const TasksList = (props) => {
         <h3><b>Filter:</b> {display_filter}</h3>
         <p>Page: {page.currentPage}/{page.totalPages}</p>
         {updated ? <h5>{statusMsg}</h5> : <ListGroup id='list-tasks'>
-            { tasks.map((tk) => <Card><TaskElement key={tk.id} task={tk} setTasks={props.setTasks} completed={tk.completed} loggedIn={loggedIn}/></Card> ) } 
+            { tasks.map((tk) => <Card style={{margin: "5px"}}><TaskElement key={tk.id} task={tk} setTasks={props.setTasks} completed={tk.completed} loggedIn={loggedIn} setUpdated={setUpdated}/></Card> ) } 
         </ListGroup>}
         <br />
         {/* <Button >next</Button>

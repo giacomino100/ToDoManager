@@ -1,4 +1,6 @@
 'use strict';
+const db = require('../components/db');
+
 
 /**
  * Remove a user from the assigned task
@@ -37,7 +39,6 @@
 }
 
 
-
 /**
  * Retreve the users assignted to the task
  *
@@ -50,10 +51,10 @@
  **/
  exports.getUsersAssigned = function(taskId,owner) {
   return new Promise((resolve, reject) => {
-      const sql1 = "SELECT owner FROM tasks t WHERE t.id = ?";
+      const sql1 = "SELECT owner FROM tasks WHERE id = ?";
       db.all(sql1, [taskId], (err, rows) => {
           if (err)
-              reject(err);
+            reject(err);
           else if (rows.length === 0)
               reject(404);
           else if(owner != rows[0].owner) {
@@ -65,7 +66,7 @@
                   if (err) {
                       reject(err);
                   } else {
-                      let users = rows.map((row) => new User(row.uid, row.name, row.email, null));
+                      let users = rows.map((row) => {return {id: row.uid, name: row.name, email: row.email, hash: null}});
                       resolve(users);
                   }
               });
