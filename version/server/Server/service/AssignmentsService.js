@@ -14,6 +14,7 @@ const db = require('../components/db');
  * 
  **/
  exports.removeUser = function(taskId,userId,owner) {
+     console.log(taskId + ' ' + userId + ' ' + owner)
   return new Promise((resolve, reject) => {
       const sql1 = "SELECT owner FROM tasks t WHERE t.id = ?";
       db.all(sql1, [taskId], (err, rows) => {

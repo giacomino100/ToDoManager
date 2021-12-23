@@ -24,7 +24,7 @@ const Sidebar = (props) => {
             }
         } else {
             return {
-                height: '280px',
+                height: '400px',
                 opacity: 1,
                 transform: 'translateY(0)',
                 transition: 'all .5s ease',

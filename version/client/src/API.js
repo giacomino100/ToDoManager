@@ -189,6 +189,29 @@ const getUsersAssigned = async (taskId) => {
   });
 }
 
+//DELETE retrieve all users assigned to a particular task
+const removeUser = async (taskId, userId) => {
+  return new Promise((resolve, reject) => {
+    fetch('/api/tasks/' + taskId + '/assignees/' + userId, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      }
+    }) 
+    .then((res) => {
+      if (!res.ok) {
+        const error = new Error(`${res.status}: ${res.statusText}`);
+        error.response = res;
+        throw error;
+      } 
+      resolve();
+    })
+      .catch((err) => {
+        reject({ message: err.message });
+      });
+  });
+}
+
 
 async function logIn(credentials) {
     const type = "login"
@@ -234,5 +257,5 @@ async function logIn(credentials) {
     }
   }
 
-const API = { getPublicTasks, getUserTasks, addTask, deleteTask, updateTask, completeTask, getUsersAssigned, getUserInfo, logIn, logOut };
+const API = { getPublicTasks, getUserTasks, addTask, deleteTask, updateTask, completeTask, getUsersAssigned, removeUser, getUserInfo, logIn, logOut };
 export default API;

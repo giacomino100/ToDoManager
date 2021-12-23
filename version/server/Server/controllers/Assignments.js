@@ -13,10 +13,10 @@ module.exports.assignAutomatically = function assignAutomatically (req, res, nex
     });
 };
 
-module.exports.removeUser = function removeUser (req, res, next, taskId, userId) {
-  Assignments.removeUser(taskId, userId)
+module.exports.removeUser = function removeUser (req, res, next) {
+  Assignments.removeUser(req.params.taskId, req.params.userId, req.user)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 204);
     })
     .catch(function (response) {
       if(response == 404){

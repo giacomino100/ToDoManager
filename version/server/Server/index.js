@@ -77,8 +77,8 @@ app.get('/api/users/:userId/tasks/created', passport.authenticate('jwt', { sessi
 app.get('/api/users/:userId/tasks/assigned', taskController.getAssignedTasks);
 
 app.get('/api/tasks/:taskId/assignees', passport.authenticate('jwt', { session: false }), assignmentController.getUsersAssigned)
-app.post('/api/tasks/:taskId/assignees', assignmentController.assignTaskToUser)
-app.delete('/api/tasks/:taskId/assignees/:userId', assignmentController.removeUser)
+app.post('/api/tasks/:taskId/assignees', passport.authenticate('jwt', { session: false }), assignmentController.assignTaskToUser)
+app.delete('/api/tasks/:taskId/assignees/:userId', passport.authenticate('jwt', { session: false }), assignmentController.removeUser)
 
 //lab2 -- rest Api image
 app.post('/api/tasks/:taskId/images', passport.authenticate('jwt', { session: false }), storage.uploadImg, imageController.addImage);
