@@ -10,6 +10,7 @@ import LoginPage from './components/LoginPage.js';
 import HeaderNav from './components/HeaderNav.js';
 import Sidebar from './components/Sidebar.js';
 import AddTask from './components/AddTask.js';
+import UserTasksList from './components/UserTasksList.js';
 import TasksList from './components/TasksList.js';
 
 import './App.css';
@@ -22,7 +23,6 @@ function App() {
     const [collapsed, setCollapsed] = useState(false);
     const [updated, setUpdated] = useState(true);
 
-    const [tasks, setTasks] = useState([]);
 
     const [filter, setFilter] = useState('all');
 
@@ -45,7 +45,7 @@ function App() {
             <Container fluid className='noPad'>
                 <Row>
                     <Col>
-                        <HeaderNav collapsed={collapsed} setCollapsed={setCollapsed} loggedIn={loggedIn} setLoggedIn={setLoggedIn}  name={user.name} />
+                        <HeaderNav collapsed={collapsed} setCollapsed={setCollapsed} loggedIn={loggedIn} setLoggedIn={setLoggedIn} name={user.name} />
                     </Col>
                 </Row>
                 { loggedIn ? <>
@@ -55,12 +55,12 @@ function App() {
                     </Col>
                     <Col md={8}>
                         <Switch>
-                            <Route exact path='/allyourtasks' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
-                            <Route exact path='/all' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
-                            <Route exact path='/today' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
-                            <Route exact path='/next7days' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
-                            <Route exact path='/important' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
-                            <Route exact path='/login'><Redirect to='/allyourtasks'/></Route>
+                            <Route exact path='/managementTasks' render={() => <UserTasksList  updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
+                            <Route exact path='/all' render={() => <TasksList updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
+                            <Route exact path='/today' render={() => <TasksList  updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
+                            <Route exact path='/next7days' render={() => <TasksList  updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
+                            <Route exact path='/important' render={() => <TasksList  updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
+                            <Route exact path='/login'><Redirect to='/managementTasks'/></Route>
                         </Switch>
                     </Col>
                     </Row>
@@ -69,18 +69,18 @@ function App() {
                     <>
                     <Container>
                         <Switch>
-                            <Route exact path='/public' render={() => <TasksList tasks={tasks} setTasks={setTasks} updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
+                            <Route exact path='/public' render={() => <TasksList  updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
                             <Route exact path='/login' render={() => <LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUser={setUser} setUpdated={setUpdated} /> }/>
-                            <Route exact path='/'><Redirect to='/public'/></Route>
                             <Route exact path='/all'><Redirect to='/public'/></Route>
                             <Route exact path='/today'><Redirect to='/public'/></Route>
                             <Route exact path='/next7days'><Redirect to='/public'/></Route>
                             <Route exact path='/important'><Redirect to='/public'/></Route>
+                            <Route exact path='/'><Redirect to='/public'/></Route>
                         </Switch>
                     </Container>
                     </>}
 
-                {loggedIn && <AddTask setTasks={setTasks} setUpdated={setUpdated} />}
+                {loggedIn && <AddTask setUpdated={setUpdated} />}
 
             </Container>
         </Router>

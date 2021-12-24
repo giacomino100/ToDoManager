@@ -3,7 +3,7 @@ const BASEURL = '/api/'
 //GET all public tasks
 const getPublicTasks = async (next) => {
     return new Promise((resolve, reject) => {
-      const url = next ? next : '/api/tasks/public'
+      const url = next ? ('/api/tasks/public?pageNo=' + next) : ('/api/tasks/public')
       fetch(url, {
         method: "GET",
         headers: {
@@ -285,14 +285,28 @@ async function logIn(credentials) {
   }
   
   async function logOut() {
-    const type = 'logout'
-    await fetch('/api/users/authenticator/' + type, {
+    const type = "logout"
+    let response = await fetch('/api/users/authenticator/' + type, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      },
+      }    
     });
+    if(response.ok) {
+      const user = await response.json();
+      return null;
+    }
+    else {
+      try {
+        const errDetail = await response.json();
+        throw errDetail.message;
+      }
+      catch(err) {
+        throw err;
+      }
+    }
   }
+  
   
   async function getUserInfo() {
     const response = await fetch(BASEURL + '/sessions/current');

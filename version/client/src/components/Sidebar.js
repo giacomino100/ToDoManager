@@ -39,7 +39,7 @@ const Sidebar = (props) => {
         <div className="editSidebar" style={collapseStyle}>
             {loggedIn ? 
             <>
-            <NavLink to={{pathname: '/allyourtasks'}} className='nav-link' onClick={() => setUpdated(true)}>Manage your tasks</NavLink>
+            <NavLink to={{pathname: '/managementTasks'}} className='nav-link' onClick={() => setUpdated(true)}>Manage your tasks</NavLink>
             <hr></hr>
             <p><b>Tasks assigned to you</b></p>
             <NavLink to={{pathname: '/all'}} className='nav-link' onClick={() => setUpdated(true)}>All</NavLink>

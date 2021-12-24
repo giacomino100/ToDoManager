@@ -13,16 +13,16 @@ import isToday from 'dayjs/plugin/isToday';
 
 dayjs.extend(isToday);
 
-const TasksList = (props) => {
-
-    const {tasks, setTasks, updated, loggedIn, user, setUpdated} = props
+export default function TasksList(props){
+    const {updated, loggedIn, user, setUpdated} = props
     const statusMsg = 'Loading...';
+
+    const [tasks, setTasks] = useState([]);
 
     const [page, setPage] = useState('');
     const [pageNo, setPageNo] = useState(false)
 
-    const [nextButton, setNextButton] = useState(true)
-    const [backButton, setBackButton] = useState(true)
+
     const loc = useLocation();
 
     let filter = (loc.pathname ? loc.pathname.substring(1, loc.pathname.length) : '');
@@ -35,10 +35,10 @@ const TasksList = (props) => {
         const ret = d && (!d.isBefore(tomorrow, 'day') && !d.isAfter(nextWeek, 'day'));
         return ret;
     }
-    
+
 
     const handleFilteredTasks = (filteredTasks) => {
-        if(filter === 'allyourtasks')
+        if(filter === 'all')
             return filteredTasks
         if(filter === 'today')
             return filteredTasks.filter( t => t.deadline && t.deadline.isToday())
@@ -63,14 +63,15 @@ const TasksList = (props) => {
         setPageNo(parseInt(page.currentPage) - parseInt(1))
         setUpdated(true)
     }
+    
+
     useEffect(() => {
         if(updated){
             if(loggedIn === false){
-                API.getPublicTasks()
+                API.getPublicTasks(pageNo)
                 .then(res => {
                     setPage(res)
                     setTasks(res.tasks)
-                    setUpdated(false)
                 })
                 .catch((err) => console.log(err))
             } else if(loggedIn === true){
@@ -79,10 +80,10 @@ const TasksList = (props) => {
                     setPage(res)
                     let filteredTasks = handleFilteredTasks(res.tasks)
                     setTasks(filteredTasks)
-                    setUpdated(false)
                 })
                 .catch((err) => console.log(err))
             }
+            setUpdated(false)
         }
 
     }, [updated, user.id, loggedIn, setTasks, setUpdated, pageNo]);
@@ -92,8 +93,11 @@ const TasksList = (props) => {
         <>
         <h3><b>Filter:</b> {display_filter}</h3>
         <p>Page: {page.currentPage}/{page.totalPages}</p>
-        {updated ? <h5>{statusMsg}</h5> : <ListGroup id='list-tasks'>
-            { tasks.map((tk) => <Card style={{margin: "5px"}}><TaskElement key={tk.id} task={tk} setTasks={props.setTasks} completed={tk.completed} loggedIn={loggedIn} setUpdated={setUpdated}/></Card> ) } 
+        {updated ? 
+        <h5>{statusMsg}</h5> 
+        : 
+        <ListGroup id='list-tasks'>
+            { tasks.map(tk => <Card style={{margin: "5px"}}><TaskElement key={tk.id} task={tk} setTasks={props.setTasks} completed={tk.completed} loggedIn={loggedIn} setUpdated={setUpdated}/></Card> ) } 
         </ListGroup>}
         <br/>
         <Container className='d-flex justify-content-center'>
@@ -109,6 +113,6 @@ const TasksList = (props) => {
         <br />
         </>
     );
-};
 
-export default TasksList;
+
+}
