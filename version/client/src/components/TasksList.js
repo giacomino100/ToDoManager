@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ListGroup, Button, Card } from 'react-bootstrap';
+import { ListGroup, Button, Card, Row, Col, Container } from 'react-bootstrap';
 
 import TaskElement from "./TaskElement.js";
 
@@ -19,6 +19,10 @@ const TasksList = (props) => {
     const statusMsg = 'Loading...';
 
     const [page, setPage] = useState('');
+    const [pageNo, setPageNo] = useState(false)
+
+    const [nextButton, setNextButton] = useState(true)
+    const [backButton, setBackButton] = useState(true)
     const loc = useLocation();
 
     let filter = (loc.pathname ? loc.pathname.substring(1, loc.pathname.length) : '');
@@ -44,7 +48,21 @@ const TasksList = (props) => {
             return filteredTasks.filter( t => t.important)
     }
     
+    const handleNext = () => {
+        if(page.currentPage == page.totalPages){
+            return;
+        }
+        setPageNo(parseInt(page.currentPage) + parseInt(1))
+        setUpdated(true)
+    }
 
+    const handleBack = () => {
+        if(page.currentPage == 1){
+            return;
+        }
+        setPageNo(parseInt(page.currentPage) - parseInt(1))
+        setUpdated(true)
+    }
     useEffect(() => {
         if(updated){
             if(loggedIn === false){
@@ -56,7 +74,7 @@ const TasksList = (props) => {
                 })
                 .catch((err) => console.log(err))
             } else if(loggedIn === true){
-                API.getUserTasks(false, user.id)
+                API.getUserTasks(pageNo, user.id)
                 .then(res => {
                     setPage(res)
                     let filteredTasks = handleFilteredTasks(res.tasks)
@@ -67,7 +85,7 @@ const TasksList = (props) => {
             }
         }
 
-    }, [updated, user.id, loggedIn, setTasks, setUpdated]);
+    }, [updated, user.id, loggedIn, setTasks, setUpdated, pageNo]);
 
 
     return (
@@ -77,9 +95,16 @@ const TasksList = (props) => {
         {updated ? <h5>{statusMsg}</h5> : <ListGroup id='list-tasks'>
             { tasks.map((tk) => <Card style={{margin: "5px"}}><TaskElement key={tk.id} task={tk} setTasks={props.setTasks} completed={tk.completed} loggedIn={loggedIn} setUpdated={setUpdated}/></Card> ) } 
         </ListGroup>}
-        <br />
-        {/* <Button >next</Button>
-        <Button >back</Button> */}
+        <br/>
+        <Container className='d-flex justify-content-center'>
+            <Row>
+                <Col>
+                    <Button onClick={() =>handleBack()}>Back</Button>&nbsp;
+                    <Button onClick={() =>handleNext()}>Next</Button>
+                </Col>
+            </Row>
+        </Container>
+
         <br />
         <br />
         </>

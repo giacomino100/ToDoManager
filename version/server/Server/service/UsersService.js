@@ -48,7 +48,7 @@ exports.getUserByEmail = function (email) {
           }else if (rows.length === 0){
                 resolve(404);
           } else {
-                let users = rows.map((row) => ({id: row.id, name: row.name, email: row.name, hash: row.hash}));
+                let users = rows.map((row) => ({id: row.id, email: row.email, name: row.name, hash: row.hash}));
                 resolve(users);
               }
         });

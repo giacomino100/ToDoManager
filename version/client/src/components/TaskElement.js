@@ -162,7 +162,7 @@ function TaskElement(props) {
     return (
         <ListGroup.Item id='elem-task'>
             <Row>
-                <Col md={6}>
+                <Col md={5}>
                     {!loggedIn  ? <>
                     <div className="custom-control custom-checkbox">
                         <input type="checkbox" className="custom-control-input" id={task.id} checked={completed} onChange={() => markTask(task.id)} ></input> 
@@ -184,24 +184,22 @@ function TaskElement(props) {
                     <small>{deadlineToDisplay}</small>
                 </Col>
                 <Col>
+                    <Button onClick={handleShowEdit}><FontAwesomeIcon icon={faEdit} className='icon-btn'  /></Button>
+                </Col>
+                <Col>
                     <Button style={{fontSize: '11pt'}} onClick={() => setShowMore(showMore ? false : true)}>Show more </Button>
+                </Col>
+                <Col>
+                    <Button onClick={handleShowDelete}><FontAwesomeIcon icon={faTrashAlt} className='icon-btn'  /></Button>
                 </Col>
 
 
             </Row>
             {showMore && <>
-            <Row style={{margin: "10px"}}>
-                <Col>
-                    <Button><FontAwesomeIcon icon={faEdit} className='icon-btn' onClick={handleShowEdit} /></Button>
-                    <Button><FontAwesomeIcon icon={faTrashAlt} className='icon-btn' onClick={handleShowDelete} /></Button>
-                </Col>
-                
-                <Col>
-                    <Button style={{fontSize: '11pt'}}onClick={() => setShowMore(showMore ? false : true)}>Add assignments</Button>
-                </Col>
-            </Row>
+            <hr></hr>
+            <h5>Assignments</h5>
             <Row style={{margin: "2px"}}>
-                        <Assignments taskId={task.id}></Assignments>
+                <Assignments taskId={task.id}></Assignments>
             </Row></>}
 
             <ModalEdit setUpdated={props.setUpdated} showEdit={showEdit} handleClose={handleCloseEdit} handleShow={handleShowEdit} setTasks={props.setTasks} task={task} />

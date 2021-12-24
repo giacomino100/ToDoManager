@@ -28,7 +28,7 @@ const getPublicTasks = async (next) => {
 //GET all task of a user
 const getUserTasks = async (next, userId) => {
   return new Promise((resolve, reject) => {
-    const url = next ? next : ('/api/users/' + userId + '/tasks/created')
+    const url = next ? ('/api/users/' + userId + '/tasks/created?pageNo=' + next) : ('/api/users/' + userId + '/tasks/created')
     fetch(url, {
       method: "GET",
       headers: {
@@ -212,6 +212,53 @@ const removeUser = async (taskId, userId) => {
   });
 }
 
+//GET all users
+const getUsers = async () => {
+  return new Promise((resolve, reject) => {
+    fetch('/api/users/', {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    }) 
+    .then((res) => {
+      if (!res.ok) {
+        const error = new Error(`${res.status}: ${res.statusText}`);
+        error.response = res;
+        throw error;
+      }
+      resolve(res.json());
+    })
+      .catch((err) => {
+        reject({ message: err.message });
+      });
+  });
+}
+
+//POST assign a task to a user
+const assignTaskToUser = async (taskId, user) => {
+  console.log(user)
+  return new Promise((resolve, reject) => {
+    fetch('/api/tasks/' + taskId + '/assignees', {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user)
+    }) 
+    .then((res) => {
+      if (!res.ok) {
+        const error = new Error(`${res.status}: ${res.statusText}`);
+        error.response = res;
+        throw error;
+      }
+      resolve(null);
+    })
+      .catch((err) => {
+        reject({ message: err.message });
+      });
+  });
+}
 
 async function logIn(credentials) {
     const type = "login"
@@ -257,5 +304,5 @@ async function logIn(credentials) {
     }
   }
 
-const API = { getPublicTasks, getUserTasks, addTask, deleteTask, updateTask, completeTask, getUsersAssigned, removeUser, getUserInfo, logIn, logOut };
+const API = { getPublicTasks, getUserTasks, addTask, deleteTask, updateTask, completeTask, getUsersAssigned, removeUser, getUsers, assignTaskToUser, getUserInfo, logIn, logOut };
 export default API;
