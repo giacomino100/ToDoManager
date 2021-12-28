@@ -74,7 +74,7 @@ app.get('/api/tasks/:taskId', passport.authenticate('jwt', { session: false }), 
 app.put('/api/tasks/:taskId', passport.authenticate('jwt', { session: false }), validate({ body: taskSchema }), taskController.updateTask);
 app.put('/api/tasks/:taskId/completion', passport.authenticate('jwt', { session: false }), taskController.completeTask)
 app.get('/api/users/:userId/tasks/created', passport.authenticate('jwt', { session: false }), taskController.getUserTasks);
-app.get('/api/users/:userId/tasks/assigned', taskController.getAssignedTasks);
+app.get('/api/users/:userId/tasks/assigned', passport.authenticate('jwt', { session: false }),taskController.getAssignedTasks);
 
 app.get('/api/tasks/:taskId/assignees', passport.authenticate('jwt', { session: false }), assignmentController.getUsersAssigned)
 app.post('/api/tasks/:taskId/assignees', passport.authenticate('jwt', { session: false }), assignmentController.assignTaskToUser)

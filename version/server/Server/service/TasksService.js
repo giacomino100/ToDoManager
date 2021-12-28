@@ -337,6 +337,29 @@ exports.getTotalPublicTasks = function(){
     });
 }
 
+
+/**
+ * Retreve the number of total tasks assigned to the user
+ * 
+ * Input: 
+ * - req: the request of the user
+ * Output:
+ * - the number of the total tasks
+ * 
+ **/
+ exports.getAssignedTasksTotal = function(req) {
+    return new Promise((resolve, reject) => {
+        var sql =  "SELECT * FROM assignments WHERE user = ?;"
+        db.all(sql, [req.params.userId], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows.length);
+            }
+        });
+    });
+}
+
 /**
  * Utility functions
  */

@@ -37,18 +37,16 @@ const Sidebar = (props) => {
 
     return (
         <div className="editSidebar" style={collapseStyle}>
-            {loggedIn ? 
+            {loggedIn &&
             <>
             <NavLink to={{pathname: '/managementTasks'}} className='nav-link' onClick={() => setUpdated(true)}>Manage your tasks</NavLink>
             <hr></hr>
             <p><b>Tasks assigned to you</b></p>
             <NavLink to={{pathname: '/all'}} className='nav-link' onClick={() => setUpdated(true)}>All</NavLink>
-            <NavLink to={{pathname: '/today'}} className='nav-link' onClick={() => setUpdated(true)}>Today</NavLink>
+            {/* <NavLink to={{pathname: '/today'}} className='nav-link' onClick={() => setUpdated(true)}>Today</NavLink>
             <NavLink to={{pathname: '/next7days'}} className='nav-link' onClick={() => setUpdated(true)}>Next 7 days</NavLink>
-            <NavLink to={{pathname: '/important'}} className='nav-link'onClick={() => setUpdated(true)}>Important</NavLink>
+            <NavLink to={{pathname: '/important'}} className='nav-link'onClick={() => setUpdated(true)}>Important</NavLink> */}
             </>
-            :
-            <NavLink to={{pathname: '/public'}} className='nav-link' onClick={() => props.setFilter('public')}>Public</NavLink>
             }
         </div>
     );

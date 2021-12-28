@@ -182,16 +182,16 @@ module.exports.getAssignedTasks = function getAssignedTasks (req, res, next) {
   if(req.user != req.params.userId){
     utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The user is not characterized by the specified userId.' }], }, 403);
     return;
-}
+  }
 
-var numOfTasks = 0;
-var next=0;
+  var numOfTasks = 0;
+  var next=0;
 
-var numOfTasks;
-Tasks.getAssignedTasksTotal(req)
-    .then(function(response) {
-        numOfTasks = response;
-    });
+  var numOfTasks;
+  Tasks.getAssignedTasksTotal(req)
+      .then(function(response) {
+          numOfTasks = response;
+      });
 
 Tasks.getAssignedTasks(req)
     .then(function(response) {

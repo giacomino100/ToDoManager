@@ -16,7 +16,10 @@ function ModalLogout(props) {
         e.preventDefault();
 
         API.logOut()
-        .then(() => props.setLoggedIn(false))
+        .then(() => {
+            props.setLoggedIn(false)
+            props.setUpdated(true)
+        })
         .then(() => props.handleClose())
         
     }
@@ -49,7 +52,7 @@ function ModalLogout(props) {
 
 const HeaderNav = (props) => {
 
-    const {loggedIn, name} = props
+    const {loggedIn, name, setUpdated} = props
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -69,12 +72,12 @@ const HeaderNav = (props) => {
                     </Form>
                 </Navbar.Collapse>
 
-                {name && <h6 style={{ color: "white" }}> Logged in as: {name} </h6>}
+                {loggedIn && <h6 style={{ color: "white" }}> Logged in as: {name} </h6>}
 
                 {loggedIn ? <img src={loginLogo} alt='' className='loginLogo' onClick={handleShow} ></img> : <a href="/login" ><img src={loginLogo} alt='' className='loginLogo' ></img></a>}
 
             </Navbar>
-            <ModalLogout show={show} handleClose={handleClose} handleShow={handleShow} setLoggedIn={props.setLoggedIn} />
+            <ModalLogout show={show} handleClose={handleClose} handleShow={handleShow} setLoggedIn={props.setLoggedIn} setUpdated={setUpdated}/>
         </>
     );
 };

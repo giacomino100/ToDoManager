@@ -237,7 +237,6 @@ const getUsers = async () => {
 
 //POST assign a task to a user
 const assignTaskToUser = async (taskId, user) => {
-  console.log(user)
   return new Promise((resolve, reject) => {
     fetch('/api/tasks/' + taskId + '/assignees', {
       method: "POST",
@@ -253,6 +252,31 @@ const assignTaskToUser = async (taskId, user) => {
         throw error;
       }
       resolve(null);
+    })
+      .catch((err) => {
+        reject({ message: err.message });
+      });
+  });
+}
+
+
+//GET retrieve assigned task of a user
+const getAssignedTasks = async (next, userId) => {
+  return new Promise((resolve, reject) => {
+    const url = next ? ('/api/users/' + userId + '/tasks/assigned?pageNo=' + next) : ('/api/users/' + userId + '/tasks/assigned')
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    }) 
+    .then((res) => {
+      if (!res.ok) {
+        const error = new Error(`${res.status}: ${res.statusText}`);
+        error.response = res;
+        throw error;
+      }
+      resolve(res.json());
     })
       .catch((err) => {
         reject({ message: err.message });
@@ -293,7 +317,6 @@ async function logIn(credentials) {
       }    
     });
     if(response.ok) {
-      const user = await response.json();
       return null;
     }
     else {
@@ -318,5 +341,5 @@ async function logIn(credentials) {
     }
   }
 
-const API = { getPublicTasks, getUserTasks, addTask, deleteTask, updateTask, completeTask, getUsersAssigned, removeUser, getUsers, assignTaskToUser, getUserInfo, logIn, logOut };
+const API = { getPublicTasks, getUserTasks, addTask, deleteTask, updateTask, completeTask, getUsersAssigned, removeUser, getUsers, assignTaskToUser, getAssignedTasks, getUserInfo, logIn, logOut };
 export default API;

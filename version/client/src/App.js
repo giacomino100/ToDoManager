@@ -26,26 +26,12 @@ function App() {
 
     const [filter, setFilter] = useState('all');
 
-	useEffect(() => {
-		// async function checkIfAuthed() {
-		// 	const user = await API.getUserInfo();
-		// 	if (user) {
-		// 		setEmail(user.email);
-		// 		setLoggedIn(true);
-		// 	}
-		// };
-
-		// checkIfAuthed();
-	}, [loggedIn]);
-    
-
-
 	return (
         <Router>
             <Container fluid className='noPad'>
                 <Row>
                     <Col>
-                        <HeaderNav collapsed={collapsed} setCollapsed={setCollapsed} loggedIn={loggedIn} setLoggedIn={setLoggedIn} name={user.name} />
+                        <HeaderNav collapsed={collapsed} setCollapsed={setCollapsed} loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUpdated={setUpdated} name={user.name} />
                     </Col>
                 </Row>
                 { loggedIn ? <>
@@ -70,12 +56,12 @@ function App() {
                     <Container>
                         <Switch>
                             <Route exact path='/public' render={() => <TasksList  updated={updated} setUpdated={setUpdated} loggedIn={loggedIn} user={user} filter={filter}/> }/>
-                            <Route exact path='/login' render={() => <LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUser={setUser} setUpdated={setUpdated} /> }/>
+                            <Route exact path='/login' render={() => <LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUser={setUser} /> }/>
                             <Route exact path='/all'><Redirect to='/public'/></Route>
                             <Route exact path='/today'><Redirect to='/public'/></Route>
                             <Route exact path='/next7days'><Redirect to='/public'/></Route>
                             <Route exact path='/important'><Redirect to='/public'/></Route>
-                            <Route exact path='/'><Redirect to='/public'/></Route>
+                            <Route><Redirect to='/public' /></Route>
                         </Switch>
                     </Container>
                     </>}

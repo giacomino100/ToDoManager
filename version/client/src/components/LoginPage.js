@@ -8,7 +8,7 @@ import API from '../API';
 
 const LoginPage = (props) => {
 
-    const {setLoggedIn, setUpdated, setUser} = props;
+    const {setLoggedIn, setUser} = props;
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -28,7 +28,6 @@ const LoginPage = (props) => {
         if (user) {
             setUser(user)
             setValid(true);
-            setUpdated(true)
             setLoggedIn(true);
         }
         else

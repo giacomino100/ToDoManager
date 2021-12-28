@@ -75,7 +75,7 @@ export default function TasksList(props){
                 })
                 .catch((err) => console.log(err))
             } else if(loggedIn === true){
-                API.getUserTasks(pageNo, user.id)
+                API.getAssignedTasks(pageNo, user.id)
                 .then(res => {
                     setPage(res)
                     let filteredTasks = handleFilteredTasks(res.tasks)
